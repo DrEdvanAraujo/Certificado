@@ -10,6 +10,7 @@
       font-family: 'Roboto', sans-serif;
       background-color: #f7f7f7;
       display: flex;
+      flex-direction: column; /* Use column layout */
       justify-content: center;
       align-items: center;
       min-height: 100vh;
@@ -32,6 +33,7 @@
       box-sizing: border-box; /* Include padding and border in the element's total width and height */
       margin: 20px; /* Add some margin for screen view */
       overflow: hidden; /* Important: Hide parts of watermark if it overflows */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
     }
 
     .certificado-logo {
@@ -75,7 +77,6 @@
         width: 200px; /* Adjust size as needed */
         height: auto; /* Maintain aspect ratio */
         z-index: 10; /* Ensure it's above the watermark */
-        /* Remove any float or absolute positioning if needed, relying on block display and margin auto */
      }
 
 
@@ -103,15 +104,18 @@
       border-bottom: 1px solid #aaa;
       display: inline-block;
       padding: 5px 20px;
-      margin: 10px;
+      margin: 10px auto; /* Center inline-block with margin auto and display */
       min-width: 300px;
+      text-align: center; /* Center text inside the editable div */
+      white-space: nowrap; /* Prevent wrapping in editable field if possible */
+      overflow: hidden; /* Hide overflow if nowrap causes issues */
+      text-overflow: ellipsis; /* Add ellipsis if text is too long */
     }
 
     .assinatura {
-      margin-top: 10px;
+      margin-top: 20px; /* Adjusted margin */
       /* Keep text-align: center from .certificado */
-      /* Needs position: relative if signature-principal was absolute, but we are using display: block for easier centering */
-      position: relative; /* Kept in case of other potential uses, but margin: auto centers block elements */
+      position: relative;
     }
 
     .assinatura span {
@@ -130,15 +134,29 @@
       border: none;
       border-radius: 5px;
       color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    button:disabled {
+        background-color: #cccccc !important;
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 
     #imprimir {
       background-color: #4a8062;
     }
+     #imprimir:hover:not(:disabled) {
+        background-color: #3a6a4e; /* Darken color on hover */
+     }
 
     #editar {
       background-color: #3b6bbd;
     }
+    #editar:hover:not(:disabled) {
+        background-color: #2f5a9c; /* Darken color on hover */
+    }
+
 
     /* CSS rules for printing */
     @media print {
@@ -230,17 +248,18 @@
       .nome, .data {
         font-size: 30px; /* Increased */
         min-width: 400px; /* Maybe increase min-width too */
+        border-bottom: none; /* Remove border for print */
+        font-weight: normal; /* Set font weight to normal for print */
+        margin: 10px 0; /* Adjust margin for print */
+        padding: 5px 0; /* Adjust padding for print */
+      }
+
+      .assinatura {
+          margin-top: 30px; /* Increased margin for print */
       }
 
       .assinatura span {
         font-size: 20px; /* Increased */
-      }
-
-
-      /* Ensure contenteditable elements look normal in print */
-      .nome, .data {
-         border-bottom: none; /* Remove border for print */
-         font-weight: normal; /* Set font weight to normal for print */
       }
     }
   </style>
@@ -273,48 +292,136 @@
   </div>
 
   <!-- Secondary Electronic Signature Image added here (bottom right) -->
-  <!-- Note: The user's previous request was for this one. Keeping it as requested. -->
   <img src="https://i.ibb.co/GvTCc9Lj/ASS.jpg" alt="Assinatura Eletrônica Rodapé" class="certificado-assinatura-eletronica-rodape">
 
 </div>
 
+<!-- Buttons are kept outside the certificate div for easier printing -->
 <button id="imprimir" onclick="window.print()">Imprimir Certificado</button>
 <button id="editar" onclick="editarNomeData()">Editar Informações</button>
+<!-- Message area for completion status (optional, not requested but could be useful) -->
+<!-- <p id="completionMessage" style="color: red; font-weight: bold;"></p> -->
+
 
 <script>
-  // Function to format date as dd/mm/yyyy
-  function formatDate(date) {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
+    // Define the structure of tasks per week - used to calculate total tasks
+    const tarefasPorSemana = {
+      "Semana 1: Contextualização das PICS, política, racionalidades médicas e Autocuidado": ["tarefa1a", "tarefa1b", "tarefa1c", "tarefa1d", "tarefa1e", "tarefa1f"],
+      "Semana 2: Aromaterapia, Fitoterapia e Terapia de Florais": ["tarefa2a", "tarefa2b", "tarefa2c", "tarefa2d", "tarefa2e", "tarefa2f"],
+      "Semana 3: Naturopatia, Ayurveda e Yoga": ["tarefa3a", "tarefa3b", "tarefa3c", "tarefa3d", "tarefa3e", "tarefa3f"],
+      "Semana 4: Meditação, Musicoterapia e Arteterapia": ["tarefa4a", "tarefa4b", "tarefa4c", "tarefa4d", "tarefa4e", "tarefa4f"],
+      "Semana 5: Bioenergética, Biodança e Dança Circular": ["tarefa5a", "tarefa5b", "tarefa5c", "tarefa5d", "tarefa5e", "tarefa5f"],
+      "Semana 6: Constelação Familiar, Cromoterapia e Terapia Comunitária": ["tarefa6a", "tarefa6b", "tarefa6c", "tarefa6d", "tarefa6e", "tarefa6f"],
+      "Semana 7: Hipnoterapia, Imposição de Mãos e Geoterapia": ["tarefa7a", "tarefa7b", "tarefa7c", "tarefa7d", "tarefa7e", "tarefa7f"],
+      "Semana 8: Reiki, Reflexoterapia e Shantala": ["tarefa8a", "tarefa8b", "tarefa8c", "tarefa8d", "tarefa8e", "tarefa8f"],
+      "Semana 9: Homeopatia, Termalismo e MTC/Acupuntura": ["tarefa9a", "tarefa9b", "tarefa9c", "tarefa9d", "tarefa9e", "tarefa9f"],
+      "Semana 10: Antroposofia, Apiterapia, Ozonioterapia, Osteopatia e Quiropraxia": ["tarefa10a", "tarefa10b", "tarefa10c", "tarefa10d", "tarefa10e", "tarefa10f"]
+    };
 
-  // Function to set the current date
-  function setCurrentDate() {
-    const dateElement = document.querySelector('.data');
-    if (dateElement) {
-      const today = new Date();
-      dateElement.textContent = formatDate(today);
+    // Helper function to get user progress from localStorage
+    function getProgressoUsuario(email) {
+      const todos = JSON.parse(localStorage.getItem("progressoUsuarios") || "{}");
+      return todos[email] || {};
     }
-  }
 
-  // Call the function to set the date when the page loads
-  window.onload = setCurrentDate;
-
-
-  function editarNomeData() {
-    // Focus on the editable name field when the edit button is clicked
-    const nomeElement = document.querySelector('.nome');
-    if (nomeElement) {
-      nomeElement.focus();
+    // Helper function to get the current user's email from localStorage session data
+    function getUserEmailFromSession() {
+        const userJson = localStorage.getItem("currentUserStatus"); // Key used in the previous login code
+        try {
+            const session = userJson ? JSON.parse(userJson) : null;
+            if (session && typeof session === 'object' && session.email) {
+                return session.email.toLowerCase(); // Return email if found
+            }
+            return null; // No session or email found
+        } catch (e) {
+            console.error("Failed to parse user session from localStorage:", e);
+            return null; // Return null if parsing fails
+        }
     }
-     // Optional: Also make the data field editable, which is already true
-     // const dataElement = document.querySelector('.data');
-     // if (dataElement) {
-     //   dataElement.contentEditable = true;
-     // }
-  }
+
+    // Function to check task completion and enable/disable the print button
+    function checkCompletionAndEnablePrint() {
+        const printButton = document.getElementById('imprimir');
+        // const completionMessage = document.getElementById('completionMessage'); // Optional message element
+
+        const currentUserEmail = getUserEmailFromSession();
+
+        if (!currentUserEmail) {
+            console.log("Nenhum usuário logado encontrado em localStorage. Impressão desabilitada.");
+            printButton.disabled = true;
+            printButton.title = 'Nenhum usuário identificado. Acesso ao certificado restrito.';
+            // if(completionMessage) completionMessage.textContent = 'Identificação do usuário necessária para liberar o certificado.';
+            return; // Stop here if no user is identified
+        }
+
+        const progresso = getProgressoUsuario(currentUserEmail);
+        let totalTasks = 0;
+        let completedTasks = 0;
+
+        for (const semana in tarefasPorSemana) {
+            const tarefas = tarefasPorSemana[semana];
+            totalTasks += tarefas.length;
+            tareas.forEach(tarefa => {
+                if (progresso[tarefa] === "concluida") {
+                    completedTasks++;
+                }
+            });
+        }
+
+        const isComplete = totalTasks > 0 && completedTasks === totalTasks;
+
+        if (isComplete) {
+            printButton.disabled = false;
+            printButton.title = ''; // Remove title if enabled
+            // if(completionMessage) completionMessage.textContent = ''; // Clear message
+            console.log(`Usuário ${currentUserEmail}: Todas as tarefas concluídas (${completedTasks}/${totalTasks}). Impressão habilitada.`);
+        } else {
+            printButton.disabled = true;
+            printButton.title = `Você precisa completar todas as ${totalTasks} tarefas (${completedTasks} concluídas) para imprimir o certificado.`;
+            // if(completionMessage) completionMessage.textContent = `Você precisa completar todas as ${totalTasks} tarefas (${completedTasks} concluídas) para imprimir o certificado.`;
+            console.log(`Usuário ${currentUserEmail}: Tarefas não concluídas (${completedTasks}/${totalTasks}). Impressão desabilitada.`);
+        }
+    }
+
+
+    // Function to format date as dd/mm/yyyy
+    function formatDate(date) {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    // Function to set the current date
+    function setCurrentDate() {
+      const dateElement = document.querySelector('.data');
+      if (dateElement) {
+        const today = new Date();
+        dateElement.textContent = formatDate(today);
+      }
+    }
+
+    // Function triggered by the "Editar" button to focus on the name field
+    function editarNomeData() {
+      const nomeElement = document.querySelector('.nome');
+      if (nomeElement) {
+        nomeElement.focus();
+      }
+      // Data field is already contenteditable, focus is often less useful there
+    }
+
+    // On page load: set the date and check if printing should be enabled
+    window.onload = () => {
+        setCurrentDate();
+        checkCompletionAndEnablePrint();
+
+        // Optional: Prefill name/cpf if stored somewhere else (not requested, keeping it simple with just editing)
+        // const nameField = document.querySelector('.nome');
+        // if (nameField.textContent.includes('[Nome do Participante]')) {
+        //    // Maybe retrieve user name/CPF from localStorage or another source here
+        //    // For now, leave it as a placeholder for user to edit
+        // }
+    };
 </script>
 
 </body>
