@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificado CIPICS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .certificado {
+      width: 800px; /* Adjust width for screen view */
+      padding: 40px;
+      border: 10px solid #4a8062;
+      background-image: repeating-linear-gradient(
+        45deg,
+        #f0f9f4,
+        #f0f9f4 10px,
+        #ffffff 10px,
+        #ffffff 20px
+      );
+      position: relative; /* Needed for absolute positioning of logos, watermarks, and signature */
+      text-align: center;
+      box-sizing: border-box; /* Include padding and border in the element's total width and height */
+      margin: 20px; /* Add some margin for screen view */
+      overflow: hidden; /* Important: Hide parts of watermark if it overflows */
+    }
+
+    .certificado-logo {
+      position: absolute;
+      top: 20px; /* Adjust position from the top */
+      left: 20px; /* Adjust position from the left */
+      width: 80px; /* Set the width of the logo */
+      height: auto; /* Maintain aspect ratio */
+      z-index: 10; /* Ensure the small logo is above other elements */
+    }
+
+    .certificado-watermark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.ibb.co/T9VGRv6/Chat-GPT-Image-23-04-2025-22-09-23-removebg-preview.png');
+      background-size: contain; /* Use 'contain' to fit the whole logo, 'cover' to fill while potentially cropping */
+      background-repeat: no-repeat;
+      background-position: center; /* Center the watermark */
+      opacity: 0.1; /* Adjust transparency (0 = fully transparent, 1 = fully opaque) */
+      z-index: 1; /* Ensure watermark is behind text and small logo */
+      pointer-events: none; /* Allows clicking/selecting text through the watermark */
+    }
+
+    /* Style for the secondary electronic signature image in the bottom right */
+    .certificado-assinatura-eletronica-rodape {
+        position: absolute;
+        bottom: 20px; /* Distance from the bottom edge of the certificate */
+        right: 40px; /* Distance from the right edge of the certificate */
+        width: 150px; /* Adjust size as needed */
+        height: auto; /* Maintain aspect ratio */
+        z-index: 10; /* Ensure it's above the watermark */
+    }
+
+    /* Style for the main signature image above the name */
+     .assinatura-principal {
+        display: block; /* Ensure it takes up space and can be centered */
+        margin: 0 auto 5px auto; /* Center horizontally and add a little space below */
+        width: 200px; /* Adjust size as needed */
+        height: auto; /* Maintain aspect ratio */
+        z-index: 10; /* Ensure it's above the watermark */
+        /* Remove any float or absolute positioning if needed, relying on block display and margin auto */
+     }
+
+
+    .certificado h1 {
+      font-size: 30px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .certificado h2 {
+      font-size: 20px;
+      color: #4a8062;
+      margin-bottom: 30px;
+    }
+
+    .certificado p {
+        font-size: 16px; /* Default paragraph font size */
+    }
+
+
+    .nome, .data {
+      font-size: 22px;
+      font-weight: bold;
+      color: #000;
+      border-bottom: 1px solid #aaa;
+      display: inline-block;
+      padding: 5px 20px;
+      margin: 10px;
+      min-width: 300px;
+    }
+
+    .assinatura {
+      margin-top: 10px;
+      /* Keep text-align: center from .certificado */
+      /* Needs position: relative if signature-principal was absolute, but we are using display: block for easier centering */
+      position: relative; /* Kept in case of other potential uses, but margin: auto centers block elements */
+    }
+
+    .assinatura span {
+      display: block; /* Make the name span a block element */
+      font-weight: bold;
+      color: #4a8062;
+      font-size: 16px; /* Default signature font size */
+      margin-top: 0; /* Remove top margin if signature image adds spacing */
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+
+    #imprimir {
+      background-color: #4a8062;
+    }
+
+    #editar {
+      background-color: #3b6bbd;
+    }
+
+    /* CSS rules for printing */
+    @media print {
+      button {
+        display: none; /* Hide all buttons when printing */
+      }
+
+      html, body {
+          height: 100%; /* Make html and body fill the full height */
+          margin: 0; /* Remove margin */
+          padding: 0; /* Remove padding */
+          background-color: #fff; /* White background for printing */
+          overflow: hidden; /* Prevent scrolling in print */
+      }
+
+      body {
+        display: block; /* Use block layout for printing */
+        min-height: auto; /* Reset min-height */
+      }
+
+
+      /* Specific page rule to control print page size and margins */
+      @page {
+          size: landscape; /* Set the page orientation */
+          margin: 0; /* Set page margin to zero to maximize printable area */
+      }
+
+      .certificado {
+        width: 100%; /* Make certificate fill the width available within page margins (now 100% of page) */
+        height: 100%; /* Make certificate fill the height available within page margins */
+        margin: 0; /* Remove margin for printing */
+        padding: 40px; /* Keep padding to space content from border */
+        border: 10px solid #4a8062; /* Keep the border */
+        box-sizing: border-box; /* Ensure padding and border are included in width/height */
+        box-shadow: none; /* Remove shadow if any */
+        /* Use flexbox to help center content vertically within the full height */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center content vertically */
+        align-items: center; /* Center content horizontally */
+        text-align: center;
+      }
+
+      /* The watermark styles are outside @media print, so they apply to print as well */
+      /* .certificado-watermark properties will carry over */
+
+      .certificado-logo {
+         position: absolute;
+         top: 20px;
+         left: 20px;
+         width: 80px;
+         height: auto;
+         z-index: 10;
+      }
+
+       /* Ensure secondary electronic signature is positioned correctly in print */
+       .certificado-assinatura-eletronica-rodape {
+            position: absolute; /* Keeps absolute positioning */
+            bottom: 20px; /* Same bottom position */
+            right: 40px; /* Same right position */
+            width: 150px; /* Same size */
+            height: auto;
+            z-index: 10;
+        }
+
+        /* Ensure main signature image is positioned correctly in print */
+        .assinatura-principal {
+            display: block; /* Keeps block display */
+            margin: 0 auto 5px auto; /* Keeps margin for centering and spacing */
+            width: 200px; /* Same size */
+            height: auto;
+            z-index: 10;
+        }
+
+
+      /* Increase font sizes further for better readability in print */
+      .certificado h1 {
+        font-size: 40px; /* Increased */
+      }
+
+      .certificado h2 {
+        font-size: 28px; /* Increased */
+      }
+
+      .certificado p {
+        font-size: 20px; /* Increased */
+      }
+
+      .nome, .data {
+        font-size: 30px; /* Increased */
+        min-width: 400px; /* Maybe increase min-width too */
+      }
+
+      .assinatura span {
+        font-size: 20px; /* Increased */
+      }
+
+
+      /* Ensure contenteditable elements look normal in print */
+      .nome, .data {
+         border-bottom: none; /* Remove border for print */
+         font-weight: normal; /* Set font weight to normal for print */
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="certificado" id="certificado">
+  <!-- Watermark added here - positioned before content -->
+  <div class="certificado-watermark"></div>
+
+  <!-- Small Logo kept here -->
+  <img src="https://i.ibb.co/T9VGRv6/Chat-GPT-Image-23-04-2025-22-09-23-removebg-preview.png" alt="Logo" class="certificado-logo">
+
+  <h1>CERTIFICADO</h1>
+  <h2>CIPICS - Curso de Introdução às Práticas Integrativas e Complementares em Saúde e ao Autocuidado</h2>
+
+  <p>Certificamos que</p>
+
+  <div contenteditable="true" class="nome">[Nome do Participante] - CPF [CPF]</div>
+  <p>concluiu com êxito o curso com carga horária total de <strong>60 horas</strong>, promovido sob responsabilidade de Edvan Araujo (CRM-BA 34216).</p>
+
+  <!-- The data div where the date will be automatically set -->
+  <div contenteditable="true" class="data">[Data de Conclusão]</div>
+
+  <div class="assinatura">
+    <!-- Main Electronic Signature Image added here -->
+    <img src="https://i.ibb.co/yFBmdxn3/assinatura-digital-removebg-preview.png" alt="Assinatura Principal" class="assinatura-principal">
+    <span>Dr. Edvan Araujo</span>
+    CRM-BA 34216
+  </div>
+
+  <!-- Secondary Electronic Signature Image added here (bottom right) -->
+  <!-- Note: The user's previous request was for this one. Keeping it as requested. -->
+  <img src="https://i.ibb.co/GvTCc9Lj/ASS.jpg" alt="Assinatura Eletrônica Rodapé" class="certificado-assinatura-eletronica-rodape">
+
+</div>
+
+<button id="imprimir" onclick="window.print()">Imprimir Certificado</button>
+<button id="editar" onclick="editarNomeData()">Editar Informações</button>
+
+<script>
+  // Function to format date as dd/mm/yyyy
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  // Function to set the current date
+  function setCurrentDate() {
+    const dateElement = document.querySelector('.data');
+    if (dateElement) {
+      const today = new Date();
+      dateElement.textContent = formatDate(today);
+    }
+  }
+
+  // Call the function to set the date when the page loads
+  window.onload = setCurrentDate;
+
+
+  function editarNomeData() {
+    // Focus on the editable name field when the edit button is clicked
+    const nomeElement = document.querySelector('.nome');
+    if (nomeElement) {
+      nomeElement.focus();
+    }
+     // Optional: Also make the data field editable, which is already true
+     // const dataElement = document.querySelector('.data');
+     // if (dataElement) {
+     //   dataElement.contentEditable = true;
+     // }
+  }
+</script>
+
+</body>
+</html>
