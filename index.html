@@ -10,10 +10,13 @@
       font-family: 'Roboto', sans-serif;
       background-color: #f7f7f7;
       display: flex;
+      flex-direction: column; /* Stack content vertically */
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       margin: 0;
+      padding: 20px; /* Add some padding around the content */
+      box-sizing: border-box;
     }
 
     .certificado {
@@ -30,7 +33,7 @@
       position: relative; /* Needed for absolute positioning of logos, watermarks, and signature */
       text-align: center;
       box-sizing: border-box; /* Include padding and border in the element's total width and height */
-      margin: 20px; /* Add some margin for screen view */
+      margin-bottom: 20px; /* Add space below certificate */
       overflow: hidden; /* Important: Hide parts of watermark if it overflows */
     }
 
@@ -75,9 +78,7 @@
         width: 200px; /* Adjust size as needed */
         height: auto; /* Maintain aspect ratio */
         z-index: 10; /* Ensure it's above the watermark */
-        /* Remove any float or absolute positioning if needed, relying on block display and margin auto */
      }
-
 
     .certificado h1 {
       font-size: 30px;
@@ -95,7 +96,7 @@
         font-size: 16px; /* Default paragraph font size */
     }
 
-
+    /* Removed contenteditable styles as elements are no longer editable */
     .nome, .data {
       font-size: 22px;
       font-weight: bold;
@@ -105,96 +106,132 @@
       padding: 5px 20px;
       margin: 10px;
       min-width: 300px;
+      /* cursor: text; REMOVED as not editable */
     }
+
+     /* Removed focus styles for contenteditable elements */
+
 
     .assinatura {
       margin-top: 10px;
-      /* Keep text-align: center from .certificado */
-      /* Needs position: relative if signature-principal was absolute, but we are using display: block for easier centering */
-      position: relative; /* Kept in case of other potential uses, but margin: auto centers block elements */
+      position: relative;
     }
 
     .assinatura span {
-      display: block; /* Make the name span a block element */
+      display: block;
       font-weight: bold;
       color: #4a8062;
       font-size: 16px; /* Default signature font size */
-      margin-top: 0; /* Remove top margin if signature image adds spacing */
+      margin-top: 0;
+    }
+
+    .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .cpf-input-area {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        gap: 10px; /* Space between label/input and button */
+    }
+
+    .cpf-input-area label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .cpf-input-area input[type="text"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 150px; /* Adjust width as needed */
     }
 
     button {
       padding: 10px 20px;
-      margin: 10px;
       font-size: 16px;
       cursor: pointer;
       border: none;
       border-radius: 5px;
       color: white;
+      /* margin-left: 5px; REMOVED as only one button remains */
     }
 
+    /* Style the Confirmar button */
+    #confirmar-cpf {
+        background-color: #007bff; /* Blue color */
+        margin-left: 0; /* Ensure no extra margin */
+    }
+
+    /* Only keep print button style */
     #imprimir {
       background-color: #4a8062;
+      margin-left: 0; /* Ensure no extra margin */
     }
 
-    #editar {
-      background-color: #3b6bbd;
-    }
+    /* Removed style for edit button */
 
     .mensagem-alerta {
-        color: red; /* Style for the alert message */
+        /* Initially styled for errors */
+        color: red;
         font-weight: bold;
-        margin-bottom: 10px; /* Add some space below the message */
+        margin-bottom: 10px;
+        min-height: 1.2em; /* Reserve space to prevent layout shifts */
+        text-align: center; /* Center the message */
+        max-width: 600px; /* Limit width for better readability */
     }
+
+     .mensagem-alerta.success {
+        color: green; /* Style for success messages */
+     }
+     .mensagem-alerta.info {
+         color: orange; /* Style for info/warning messages */
+     }
 
 
     /* CSS rules for printing */
     @media print {
-      button {
-        display: none; /* Hide all buttons when printing */
-      }
-
-      .mensagem-alerta {
-          display: none; /* Hide the alert message when printing */
+      .controls, .mensagem-alerta {
+        display: none; /* Hide controls and alert message when printing */
       }
 
       html, body {
-          height: 100%; /* Make html and body fill the full height */
-          margin: 0; /* Remove margin */
-          padding: 0; /* Remove padding */
-          background-color: #fff; /* White background for printing */
-          overflow: hidden; /* Prevent scrolling in print */
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          background-color: #fff;
+          overflow: hidden;
       }
 
       body {
-        display: block; /* Use block layout for printing */
-        min-height: auto; /* Reset min-height */
+        display: block;
+        min-height: auto;
       }
 
-
-      /* Specific page rule to control print page size and margins */
       @page {
-          size: landscape; /* Set the page orientation */
-          margin: 0; /* Set page margin to zero to maximize printable area */
+          size: landscape;
+          margin: 0;
       }
 
       .certificado {
-        width: 100%; /* Make certificate fill the width available within page margins (now 100% of page) */
-        height: 100%; /* Make certificate fill the height available within page margins */
-        margin: 0; /* Remove margin for printing */
-        padding: 40px; /* Keep padding to space content from border */
-        border: 10px solid #4a8062; /* Keep the border */
-        box-sizing: border-box; /* Ensure padding and border are included in width/height */
-        box-shadow: none; /* Remove shadow if any */
-        /* Use flexbox to help center content vertically within the full height */
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 40px;
+        border: 10px solid #4a8062;
+        box-sizing: border-box;
+        box-shadow: none;
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Center content vertically */
-        align-items: center; /* Center content horizontally */
+        justify-content: center;
+        align-items: center;
         text-align: center;
       }
-
-      /* The watermark styles are outside @media print, so they apply to print as well */
-      /* .certificado-watermark properties will carry over */
 
       .certificado-logo {
          position: absolute;
@@ -205,53 +242,46 @@
          z-index: 10;
       }
 
-       /* Ensure secondary electronic signature is positioned correctly in print */
        .certificado-assinatura-eletronica-rodape {
-            position: absolute; /* Keeps absolute positioning */
-            bottom: 20px; /* Same bottom position */
-            right: 40px; /* Same right position */
-            width: 150px; /* Same size */
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            width: 150px;
             height: auto;
             z-index: 10;
         }
 
-        /* Ensure main signature image is positioned correctly in print */
         .assinatura-principal {
-            display: block; /* Keeps block display */
-            margin: 0 auto 5px auto; /* Keeps margin for centering and spacing */
-            width: 200px; /* Same size */
+            display: block;
+            margin: 0 auto 5px auto;
+            width: 200px;
             height: auto;
             z-index: 10;
         }
-
 
       /* Increase font sizes further for better readability in print */
       .certificado h1 {
-        font-size: 40px; /* Increased */
+        font-size: 40px;
       }
 
       .certificado h2 {
-        font-size: 28px; /* Increased */
+        font-size: 28px;
       }
 
       .certificado p {
-        font-size: 20px; /* Increased */
+        font-size: 20px;
       }
 
+      /* Reverted print styles for nome/data as they are not edited */
       .nome, .data {
-        font-size: 30px; /* Increased */
-        min-width: 400px; /* Maybe increase min-width too */
+        font-size: 30px;
+        min-width: 400px;
+        border-bottom: 1px solid #aaa; /* Keep border in print */
+        font-weight: bold; /* Keep bold in print */
       }
 
       .assinatura span {
-        font-size: 20px; /* Increased */
-      }
-
-
-      /* Ensure contenteditable elements look normal in print */
-      .nome, .data {
-         border-bottom: none; /* Remove border for print */
-         font-weight: normal; /* Set font weight to normal for print */
+        font-size: 20px;
       }
     }
   </style>
@@ -259,10 +289,7 @@
 <body>
 
 <div class="certificado" id="certificado">
-  <!-- Watermark added here - positioned before content -->
   <div class="certificado-watermark"></div>
-
-  <!-- Small Logo kept here -->
   <img src="https://i.ibb.co/T9VGRv6/Chat-GPT-Image-23-04-2025-22-09-23-removebg-preview.png" alt="Logo" class="certificado-logo">
 
   <h1>CERTIFICADO</h1>
@@ -270,35 +297,54 @@
 
   <p>Certificamos que</p>
 
-  <div contenteditable="true" class="nome">[Nome do Participante] - CPF [CPF]</div>
+  <!-- contenteditable="true" removed -->
+  <div class="nome">[Nome do Participante] - CPF [CPF]</div>
   <p>concluiu com êxito o curso com carga horária total de <strong>60 horas</strong>, promovido sob responsabilidade de Edvan Araujo (CRM-BA 34216).</p>
 
-  <!-- The data div where the date will be automatically set -->
-  <div contenteditable="true" class="data">[Data de Conclusão]</div>
+  <!-- contenteditable="true" removed -->
+  <div class="data">[Data de Conclusão]</div>
 
   <div class="assinatura">
-    <!-- Main Electronic Signature Image added here -->
     <img src="https://i.ibb.co/yFBmdxn3/assinatura-digital-removebg-preview.png" alt="Assinatura Principal" class="assinatura-principal">
     <span>Dr. Edvan Araujo</span>
     CRM-BA 34216
   </div>
 
-  <!-- Secondary Electronic Signature Image added here (bottom right) -->
-  <!-- Note: The user's previous request was for this one. Keeping it as requested. -->
   <img src="https://i.ibb.co/GvTCc9Lj/ASS.jpg" alt="Assinatura Eletrônica Rodapé" class="certificado-assinatura-eletronica-rodape">
 
 </div>
 
-<!-- Message before buttons -->
-<div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px;">
-  <p class="mensagem-alerta" style="text-align: center;">Lembre-se de colocar o Nome Completo e o CPF corretamente;</p>
-  <div style="display: flex; gap: 10px; margin-top: 10px;">
-    <button id="imprimir" onclick="window.print()">Imprimir Certificado</button>
-    <button id="editar" onclick="editarNomeData()">Editar Informações</button>
-  </div>
+<!-- Controls Area: CPF Input, Confirm, Print -->
+<div class="controls">
+    <!-- Instructional text added here -->
+    <p style="text-align: center; margin-bottom: 10px; color: #555;">Para gerar seu certificado, digite seu CPF (apenas números):</p>
+
+    <!-- CPF Input and Confirm Button -->
+    <div class="cpf-input-area">
+        <label for="cpfInput">CPF:</label>
+        <input type="text" id="cpfInput" placeholder="Ex: 05023691594" maxlength="11">
+        <button id="confirmar-cpf">Confirmar</button>
+    </div>
+
+    <!-- Message Area -->
+    <p class="mensagem-alerta" id="messageArea"></p>
+
+    <!-- Action Button (only Print remains) -->
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+      <button id="imprimir" onclick="window.print()">Imprimir Certificado</button>
+      <!-- Edit button removed -->
+    </div>
 </div>
 
+
 <script>
+  // Example "database" - Replace with your actual data source
+  const participantDatabase = {
+    "05023691594": "Edvan Santos de Araujo Filho",
+    // Add more CPF and Name pairs here
+    // "12345678900": "Nome do Outro Participante",
+  };
+
   // Function to format date as dd/mm/yyyy
   function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
@@ -307,7 +353,19 @@
     return `${day}/${month}/${year}`;
   }
 
-  // Function to set the current date
+  // Function to format CPF as ddd.ddd.ddd-dd
+  function formatCpf(rawCpf) {
+    if (!rawCpf || rawCpf.length !== 11) {
+      return rawCpf; // Return original if not 11 digits
+    }
+    return rawCpf.substring(0, 3) + '.' +
+           rawCpf.substring(3, 6) + '.' +
+           rawCpf.substring(6, 9) + '-' +
+           rawCpf.substring(9, 11);
+  }
+
+
+  // Function to set the current date from the user's computer
   function setCurrentDate() {
     const dateElement = document.querySelector('.data');
     if (dateElement) {
@@ -316,22 +374,78 @@
     }
   }
 
-  // Call the function to set the date when the page loads
-  window.onload = setCurrentDate;
-
-
-  function editarNomeData() {
-    // Focus on the editable name field when the edit button is clicked
+  // Function to handle CPF lookup and update certificate
+  function processCpf() {
+    const cpfInput = document.getElementById('cpfInput');
     const nomeElement = document.querySelector('.nome');
-    if (nomeElement) {
-      nomeElement.focus();
+    const messageArea = document.getElementById('messageArea');
+
+    if (!cpfInput || !nomeElement || !messageArea) {
+        console.error("Required elements not found.");
+        return;
     }
-     // Optional: Also make the data field editable, which is already true
-     // const dataElement = document.querySelector('.data');
-     // if (dataElement) {
-     //   dataElement.contentEditable = true;
-     // }
+
+    // Get input value and remove non-digit characters
+    const rawCpf = cpfInput.value.replace(/\D/g, '');
+
+    // Clear previous message and classes
+    messageArea.textContent = "";
+    messageArea.className = 'mensagem-alerta'; // Reset classes
+
+    if (rawCpf.length !== 11) {
+         messageArea.textContent = "Erro: Por favor, digite um CPF válido com 11 números.";
+         messageArea.classList.add('error'); // Add error class (uses default red)
+         // Optionally reset the name field or keep the current content if invalid
+         // nomeElement.textContent = "[Nome do Participante] - CPF [CPF]"; // Could reset here
+         return;
+    }
+
+    // Look up CPF in the database
+    const participantName = participantDatabase[rawCpf];
+
+    if (participantName) {
+      // CPF found - update the certificate
+      const formattedCpf = formatCpf(rawCpf);
+      nomeElement.textContent = `${participantName} - CPF ${formattedCpf}`;
+      messageArea.textContent = "Certificado atualizado com sucesso! Você já pode imprimir.";
+      messageArea.classList.add('success'); // Add success class (green)
+
+    } else {
+      // CPF not found
+      messageArea.textContent = "CPF não encontrado. A finalização do progresso ainda está em avaliação... se quiser acelerar, entre em contato com o moderador.";
+      messageArea.classList.add('info'); // Use a class for info/warning (orange)
+      // Keep the default placeholder text if CPF not found
+      nomeElement.textContent = "[Nome do Participante] - CPF [CPF]";
+    }
   }
+
+  // Removed editarNomeData function
+
+  // Add event listener to the Confirm button
+  document.getElementById('confirmar-cpf').addEventListener('click', processCpf);
+
+  // Allow pressing Enter in the input field to trigger confirm
+   document.getElementById('cpfInput').addEventListener('keypress', function(event) {
+       if (event.key === 'Enter') {
+           event.preventDefault(); // Prevent default form submission behavior
+           processCpf();
+       }
+   });
+
+
+  // Call functions when the page loads
+  window.onload = () => {
+      // Set the current date from the user's computer
+      setCurrentDate();
+
+      // Set initial message placeholder or instruction
+       const messageArea = document.getElementById('messageArea');
+       if(messageArea) {
+           messageArea.textContent = "Digite seu CPF acima para gerar o certificado.";
+           messageArea.classList.add('info'); // Use info class for initial message
+       }
+  };
+
 </script>
 
 </body>
