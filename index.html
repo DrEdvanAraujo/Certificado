@@ -80,6 +80,24 @@
         z-index: 10; /* Ensure it's above the watermark */
      }
 
+     /* --- NEW: Styles for the seals container in the bottom left --- */
+     .seals-bottom-left-container {
+         position: absolute;
+         bottom: 20px; /* Distance from the bottom edge */
+         left: 40px; /* Distance from the left edge */
+         z-index: 10; /* Ensure it's above the watermark */
+         display: flex; /* Use flexbox to arrange items side-by-side */
+         align-items: flex-end; /* Align seals to the bottom if heights differ */
+         gap: 15px; /* Space between the seals */
+     }
+
+     .seals-bottom-left-container img {
+         height: 80px; /* Set a fixed height for the seals */
+         width: auto; /* Maintain aspect ratio */
+     }
+    /* --- END NEW STYLES --- */
+
+
     .certificado h1 {
       font-size: 30px;
       color: #333;
@@ -242,34 +260,54 @@
          z-index: 10;
       }
 
+       /* Ensure secondary electronic signature is positioned correctly in print */
        .certificado-assinatura-eletronica-rodape {
-            position: absolute;
-            bottom: 20px;
-            right: 40px;
-            width: 150px;
+            position: absolute; /* Keeps absolute positioning */
+            bottom: 20px; /* Same bottom position */
+            right: 40px; /* Same right position */
+            width: 150px; /* Same size */
             height: auto;
             z-index: 10;
         }
 
+        /* Ensure main signature image is positioned correctly in print */
         .assinatura-principal {
-            display: block;
-            margin: 0 auto 5px auto;
-            width: 200px;
+            display: block; /* Keeps block display */
+            margin: 0 auto 5px auto; /* Keeps margin for centering and spacing */
+            width: 200px; /* Same size */
             height: auto;
             z-index: 10;
         }
+
+        /* --- NEW: Ensure seals container is positioned correctly in print --- */
+        .seals-bottom-left-container {
+            position: absolute; /* Keeps absolute positioning */
+            bottom: 20px; /* Same bottom position */
+            left: 40px; /* Same left position */
+            z-index: 10;
+            display: flex; /* Keep flexbox */
+            align-items: flex-end;
+            gap: 15px;
+        }
+
+        .seals-bottom-left-container img {
+            height: 80px; /* Same size */
+            width: auto;
+        }
+       /* --- END NEW PRINT STYLES --- */
+
 
       /* Increase font sizes further for better readability in print */
       .certificado h1 {
-        font-size: 40px;
+        font-size: 40px; /* Increased */
       }
 
       .certificado h2 {
-        font-size: 28px;
+        font-size: 28px; /* Increased */
       }
 
       .certificado p {
-        font-size: 20px;
+        font-size: 20px; /* Increased */
       }
 
       /* Reverted print styles for nome/data as they are not edited */
@@ -299,7 +337,7 @@
 
   <!-- contenteditable="true" removed -->
   <div class="nome">[Nome do Participante] - CPF [CPF]</div>
-  <p>concluiu com êxito o curso com carga horária total de <strong>60 horas</strong>, promovido sob responsabilidade de Edvan Araujo (CRM-BA 34216).</p>
+  <p>concluiu com êxito o curso com carga horária total de <strong>60 hours</strong>, promovido sob responsabilidade de Edvan Araujo (CRM-BA 34216).</p>
 
   <!-- contenteditable="true" removed -->
   <div class="data">[Data de Conclusão]</div>
@@ -311,6 +349,13 @@
   </div>
 
   <img src="https://i.ibb.co/GvTCc9Lj/ASS.jpg" alt="Assinatura Eletrônica Rodapé" class="certificado-assinatura-eletronica-rodape">
+
+  <!-- --- NEW: Container for the two seals in the bottom left --- -->
+  <div class="seals-bottom-left-container">
+      <img src="https://i.ibb.co/BVjFbqyX/mec-icp.png" alt="Selo MEC ICP">
+      <img src="https://i.ibb.co/hh3FWft/Anhanguera.png" alt="Selo Anhanguera">
+  </div>
+  <!-- --- END NEW CONTENT --- -->
 
 </div>
 
